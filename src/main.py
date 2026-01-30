@@ -1,63 +1,43 @@
-import argparse
-from PIL import Image
-from ascii_art.converter import image_to_ascii
+from ascii_art.converter import converte_image_to_ascii
+from ascii_art.banner import text_to_ascii
+from ascii_art.filters import apply_filters
+from cli import parse_args  #importam functia de parsing
 
-#Functia principala care permite setarea fisierului de intrare, latimea ASCII si a fisierului de iesire
 def main():
-    parser = argparse.ArgumentParser(
-        description="Convertiti o imagine in ASCII art."
-    )
-    parser.add_argument(
-        "image_path",
-        help="Calea catre imagine de convertit"
-    )
-    parser.add_argument(
-        "-w", "--width",
-        type=int,
-        default=100,
-        help="Latime rezultata in caractere ASCII"
-    )
-    parser.add_argument(
-        "-o", "--output",
-        type=str,
-        help="Fisier in care se salveaza rezultatul"
-    )
+    args = parse_args()
 
-    #Argumentele
-    args = parser.parse_args()
-    image_path = args.image_path
-    width = args.width
-    output_file = args.output
-
-    #Deschidem imaginea
-    try:
-        img = Image.open(image_path)
-    except FileNotFoundError:
-        print(f"Eroare: fisierul '{image_path}' nu a fost gasit.")
-        return
-    except Exception as e:
-        print(f"Eroare la deschiderea imaginii: {e}")
+    #Daca e text, convertim la banner
+    if args.text:
+        banner = text_to_ascii(args.text, font=args.font)
+        if args.output:
+            with open(args.output, "w", encoding="utf-8") as f:
+                f.write(banner)
+        print(banner)
         return
 
-    #Convertim imagine in ASCII
-    try:
-        ascii_art = image_to_ascii(img, width=width, chars="@%#*+=-:. ")
-    except Exception as e:
-        print(f"Eroare la conversie: {e}")
-        return
+    #Daca e imagine
+    if args.input:
+        image_path = args.input
+        width = args.width
+        chars = args.chars
+        filters = args.filter
 
-    #Afisam rezulatele in consola
-    print(ascii_art)
-
-    #Daca sa dat fisier de output salvam rezultatul
-    if output_file:
         try:
-            with open(output_file, "w", encoding="utf-8") as f:
-                f.write(ascii_art)
-            print(f"Rezultatul a fost salvat in '{output_file}'")
+            from PIL import Image
+            image = Image.open(image_path)
+            image = apply_filters(image, filters)
+            ascii_art = converte_image_to_ascii(image_path=image_path, width=width, chars=chars)
+        except FileNotFoundError:
+            print(f"Eroare: fisierul '{image_path}' nu a fost gasit.")
+            return
         except Exception as e:
-            print(f"Eroare la salvare: {e}")
+            print(f"Eroare la conversie: {e}")
+            return
+
+        print(ascii_art)
+        if args.output:
+            with open(args.output, "w", encoding="utf-8") as f:
+                f.write(ascii_art)
 
 if __name__ == "__main__":
     main()
-
