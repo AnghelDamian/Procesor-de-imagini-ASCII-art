@@ -18,4 +18,4 @@ def parse_args():
     parser.add_argument("--font", default="standard", help="Fond pentru text")
 
 
-    return parse.parse_args()
+    return parser.parse_args()
