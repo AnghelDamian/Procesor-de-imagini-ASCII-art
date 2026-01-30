@@ -1,7 +1,7 @@
 from ascii_art.converter import converte_image_to_ascii
 from ascii_art.banner import text_to_ascii
 from ascii_art.filters import apply_filters
-from cli import parse_args  #importam functia de parsing
+from ascii_art.cli import parse_args  #importam functia de parsing
 
 def main():
     args = parse_args()
