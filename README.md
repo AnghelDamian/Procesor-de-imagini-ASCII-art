@@ -93,6 +93,27 @@ py src/main.py data/test.png --filter contrast --preview
 #4.Test text si export
 python src/main.py --text "TEST" --font banner --output data/text_banner.txt
 
+Structura proiectului
+
+Procesor-de-imagini-ASCII-art/
+├── .gitignore
+├── Dockerfile
+├── README.md
+├── requirements.txt
+├── data/
+│   ├── input.png
+│   ├── logo.png
+│   └── test.jpg
+└── src/
+    ├── ascii_art/
+    │   ├── __init__.py
+    │   ├── banner.py
+    │   ├── cli.py
+    │   ├── convert.py
+    │   ├── filters.py
+    │   └── utils.py
+    └── main.py
+
 Docker
 
 #1️.Build imagine Docker
