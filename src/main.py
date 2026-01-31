@@ -2,6 +2,7 @@ from ascii_art.converter import converte_image_to_ascii
 from ascii_art.banner import text_to_ascii
 from ascii_art.filters import apply_filters
 from ascii_art.cli import parse_args  #importam functia de parsing
+import os
 
 def main():
     args = parse_args()
@@ -17,6 +18,7 @@ def main():
 
     #Daca e imagine
     if args.input:
+        base_dir = os.getcwd()
         image_path = args.input
         width = args.width
         chars = args.chars
